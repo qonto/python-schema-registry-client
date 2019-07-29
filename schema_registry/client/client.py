@@ -322,7 +322,7 @@ class SchemaRegistryClient(requests.Session):
             return version
 
         url = "/".join([self.url, "subjects", subject])
-        body = {"schema": json.dumps(avro_schema.to_json())}
+        body = {"schema": json.dumps(avro_schema.to_json(), cls=MappingProxyEncoder)}
 
         result, code = self.request(url, method="POST", body=body, headers=headers)
         if code == status.HTTP_404_NOT_FOUND:
@@ -355,7 +355,7 @@ class SchemaRegistryClient(requests.Session):
         url = "/".join(
             [self.url, "compatibility", "subjects", subject, "versions", str(version)]
         )
-        body = {"schema": json.dumps(avro_schema.to_json())}
+        body = {"schema": json.dumps(avro_schema.to_json(), cls=MappingProxyEncoder)}
         try:
             result, code = self.request(url, method="POST", body=body, headers=headers)
             if code == status.HTTP_404_NOT_FOUND:
